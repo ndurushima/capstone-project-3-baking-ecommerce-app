@@ -14,3 +14,7 @@ class OrderStatus(enum.Enum):
     placed = "placed"
     complete = "complete"
     canceled = "canceled"
+
+class FulfillmentMethod(enum.Enum):
+    pickup = "pickup"
+    delivery = "delivery"
