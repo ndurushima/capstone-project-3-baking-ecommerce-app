@@ -8,6 +8,7 @@ from .products import products_bp
 from .cart import cart_bp
 from .checkout import checkout_bp
 from .orders import orders_bp
+from .admin_orders import admin_orders_bp
 
 def create_app():
     app = Flask(__name__)
@@ -24,6 +25,7 @@ def create_app():
     app.register_blueprint(cart_bp, url_prefix="/cart")
     app.register_blueprint(checkout_bp, url_prefix="/checkout")
     app.register_blueprint(orders_bp, url_prefix="/orders")
+    app.register_blueprint(admin_orders_bp, url_prefix="/admin/orders")
 
     @app.get("/health")
     def health():
