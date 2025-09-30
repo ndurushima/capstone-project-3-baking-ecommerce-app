@@ -5,6 +5,7 @@ from .models import db
 from .config import Config
 from .auth import auth_bp, jwt  
 from .products import products_bp
+from .cart import cart_bp
 
 def create_app():
     app = Flask(__name__)
