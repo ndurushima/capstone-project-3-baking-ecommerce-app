@@ -4,6 +4,7 @@ from flask_cors import CORS
 from .models import db
 from .config import Config
 from .auth import auth_bp, jwt  
+from .products import products_bp
 
 def create_app():
     app = Flask(__name__)
@@ -16,6 +17,7 @@ def create_app():
     jwt.init_app(app)
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(products_bp, url_prefix="/products")
 
     @app.get("/health")
     def health():
