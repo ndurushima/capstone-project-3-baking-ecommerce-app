@@ -6,6 +6,7 @@ from .config import Config
 from .auth import auth_bp, jwt  
 from .products import products_bp
 from .cart import cart_bp
+from .checkout import checkout_bp
 
 def create_app():
     app = Flask(__name__)
@@ -19,6 +20,8 @@ def create_app():
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(products_bp, url_prefix="/products")
+    app.register_blueprint(cart_bp, url_prefix="/cart")
+    app.register_blueprint(checkout_bp, url_prefix="/checkout")
 
     @app.get("/health")
     def health():
