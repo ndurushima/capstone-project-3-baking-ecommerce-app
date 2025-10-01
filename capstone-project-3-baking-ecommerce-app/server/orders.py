@@ -19,7 +19,7 @@ def list_orders():
       - page: int (default 1)
       - per_page: int (default 10, max 50)
     """
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     is_admin = _is_admin(user_id)
 
     status_param = request.args.get("status")
@@ -55,7 +55,7 @@ def get_order(order_id: int):
     Get a single order. Non-admin users can only access their own orders.
     Admins can read any order.
     """
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     is_admin = _is_admin(user_id)
 
     order = Order.query.get(order_id)

@@ -52,7 +52,7 @@ def checkout():
       "delivery": { "name": "...", "line1": "...", "line2": "", "city":"", "state":"", "zip":"" }  # if delivery
     }
     """
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     payload = request.get_json() or {}
 
 

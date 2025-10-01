@@ -24,7 +24,7 @@ def signup():
     db.session.add(user)
     db.session.commit()
 
-    token = create_access_token(identity=user.id, expires_delta=timedelta(days=7))
+    token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=7))
     return jsonify({"user": user.to_dict(), "token": token}), 201
 
 
@@ -38,14 +38,14 @@ def login():
     if not user or not user.check_password(password):
         return jsonify({"error": "invalid email or password"}), 401
     
-    token = create_access_token(identity=user.id, expires_delta=timedelta(days=7))
+    token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=7))
     return jsonify({"user": user.to_dict(), "token": token}), 200
 
 
 @auth_bp.get("/me")
 @jwt_required()
 def me():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404

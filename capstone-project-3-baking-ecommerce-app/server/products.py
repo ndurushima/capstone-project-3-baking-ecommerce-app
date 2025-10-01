@@ -107,3 +107,63 @@ def get_spoonacular_dessert(recipe_id: int):
         "instructions": data.get("instructions"),
         "is_active": True,
     }), 200
+
+
+# ... keep your existing imports and routes above ...
+
+@products_bp.post("/ingest/spoonacular/<int:recipe_id>")
+def ingest_spoonacular(recipe_id: int):
+    """
+    Create (or reuse) a local Product for a Spoonacular recipe ID
+    so it can be added to the cart.
+    Optional JSON body: { "price": 16.00 }
+    Returns: { "product_id": <local_id>, "product": {...} }
+    """
+    if not SPOONACULAR_KEY:
+        abort(500, description="Missing SPOONACULAR_API_KEY")
+
+    # fetch details from Spoonacular
+    resp = requests.get(
+        f"{BASE_URL}{recipe_id}/information",
+        params={"includeNutrition": False, "apiKey": SPOONACULAR_KEY},
+        timeout=10,
+    )
+    if resp.status_code != 200:
+        abort(502, description="Dessert not found")
+
+    data = resp.json()
+    name = (data.get("title") or f"Spoonacular #{recipe_id}").strip()
+    image_url = data.get("image")
+
+    # allow client to override price, otherwise use default mapping
+    body = request.get_json(silent=True) or {}
+    price = body.get("price")
+    if not isinstance(price, (int, float)):
+        price = float(SPOONACULAR_PRICES.get(recipe_id, SPOONACULAR_PRICES["default"]))
+
+    # very light allergen mapping
+    allergens = []
+    if data.get("glutenFree") is False:
+        allergens.append("contains-gluten")
+    if data.get("dairyFree") is False:
+        allergens.append("contains-dairy")
+
+    # reuse existing local product if we’ve already ingested the same recipe
+    existing = Product.query.filter_by(name=name, image_url=image_url).first()
+    if existing:
+        return jsonify({"product_id": existing.id, "product": existing.to_dict()}), 200
+
+    # otherwise create a new local Product
+    p = Product(
+        name=name,
+        description=data.get("summary") or data.get("title"),
+        price=price,
+        image_url=image_url,
+        allergens_csv=",".join(allergens),
+        is_active=True,
+    )
+    db.session.add(p)
+    db.session.commit()
+
+    return jsonify({"product_id": p.id, "product": p.to_dict()}), 201
+

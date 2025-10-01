@@ -120,7 +120,7 @@ class Cart(db.Model):
             "status": self.status.value,
             "items": [ci.to_dict() for ci in self.items],
             "total": self.total,
-            "updated_at": self.updated_at.isformat() + "Z",
+            "updated_at": self.updated_at.isoformat() + "Z",
         }
 
 

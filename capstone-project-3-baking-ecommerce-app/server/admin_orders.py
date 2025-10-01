@@ -17,7 +17,7 @@ def update_order_status(order_id: int):
     Admin-only: update an order’s status.
     Body: { "status": "complete" | "canceled" }
     """
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     if not _is_admin(user_id):
         abort(403, description="Admin access required")
 

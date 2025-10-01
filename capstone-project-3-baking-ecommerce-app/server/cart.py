@@ -18,7 +18,7 @@ def _get_or_create_draft_cart(user_id: int) -> Cart:
 @cart_bp.get("/")
 @jwt_required()
 def get_cart():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     cart = _get_or_create_draft_cart(user_id)
     return jsonify(cart.to_dict()), 200
 
@@ -31,7 +31,7 @@ def add_or_update_item():
     - Adds or updates a line in the draft cart
     - qty <= 0 will remove the item (quality-of-life)
     """
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json() or {}
     product_id = data.get("product_id")
     qty = int(data.get("qty", 1))
@@ -67,7 +67,7 @@ def add_or_update_item():
 @cart_bp.delete("/items/<int:product_id>")
 @jwt_required()
 def remove_item(product_id: int):
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     cart = _get_or_create_draft_cart(user_id)
     item = next((i for i in cart.items if i.product_id == product_id), None)
     if not item:
