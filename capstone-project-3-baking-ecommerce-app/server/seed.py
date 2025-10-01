@@ -12,24 +12,25 @@ SEED_PRODUCTS = [
         "name": "Classic Carrot Cake",
         "description": "Moist carrot cake with cream cheese frosting",
         "price": 24.00,
-        "image_url": "https://via.placeholder.com/300x200?text=Carrot+Cake",
+        "image_url": "https://placehold.co/600x400?text=Carrot+Cake",
         "allergens_csv": "gluten,dairy,nuts",
     },
     {
         "name": "Chocolate Brownie Box",
         "description": "12 decadent chocolate brownies",
         "price": 18.00,
-        "image_url": "https://via.placeholder.com/300x200?text=Brownies",
+        "image_url": "https://placehold.co/600x400?text=Brownies",
         "allergens_csv": "gluten,dairy,eggs",
     },
     {
         "name": "Macaron Assortment",
         "description": "12 assorted French macarons",
         "price": 22.00,
-        "image_url": "https://via.placeholder.com/300x200?text=Macarons",
+        "image_url": "https://placehold.co/600x400?text=Macarons",
         "allergens_csv": "nuts,eggs,dairy",
     },
 ]
+
 
 def seed():
     with app.app_context():
