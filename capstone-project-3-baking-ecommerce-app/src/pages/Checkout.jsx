@@ -28,12 +28,10 @@ export default function Checkout() {
   const [err, setErr] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // required by backend
   const [fulfillmentDate, setFulfillmentDate] = useState("");   // YYYY-MM-DD
   const [requestedTime, setRequestedTime] = useState("");       // HH:MM (24h)
   const [method, setMethod] = useState("pickup");               // "pickup" | "delivery"
 
-  // delivery fields (only used if method === "delivery")
   const [delivery, setDelivery] = useState({
     name: "",
     line1: "",
@@ -79,7 +77,7 @@ export default function Checkout() {
     try {
       const payload = {
         fulfillment_date: fulfillmentDate,
-        requested_time: requestedTime || undefined, // optional
+        requested_time: requestedTime || undefined, 
         fulfillment_method: method,
         ...(method === "delivery"
           ? {
@@ -95,9 +93,8 @@ export default function Checkout() {
           : {}),
       };
 
-      // NOTE: our blueprint was registered at url_prefix="/checkout" with @post("/")
-      // Browsers follow the 308 to "/checkout/", so either path is fine:
       const { data } = await api.post("/checkout", payload);
+      navigate(`/order-confirmation/${data.id}`);
 
       setSuccess(true);
       // optional: navigate to My Orders right away:

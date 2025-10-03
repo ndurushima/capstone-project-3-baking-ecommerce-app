@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Header from "./components/Header";
@@ -6,6 +5,9 @@ import Catalog from "./pages/Catalog";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
+import OrderConfirmation from "./pages/OrderConfirmation";
+import AdminOrders from "./pages/AdminOrders";
 
 function Protected({ children }) {
   const { token } = useAuth();
@@ -22,9 +24,11 @@ export default function App() {
           <Route path="/" element={<Catalog />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cart" element={<Protected><Cart /></Protected>} />
-          <Route path="/orders" element={<Protected><div style={{padding:16}}>My Orders (coming soon)</div></Protected>} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/orders" element={<Protected><Orders /></Protected>} />
+          <Route path="/order-confirmation/:id" element={<OrderConfirmation />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
