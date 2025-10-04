@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Header() {
-  const { user, clearAuth } = useAuth();
+  const { user, isAdmin, clearAuth } = useAuth();
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -27,6 +27,9 @@ export default function Header() {
             <>
               <Button component={Link} to="/cart" color="primary">Cart</Button>
               <Button component={Link} to="/orders" color="primary">My Orders</Button>
+              {isAdmin && (
+                <Button component={Link} to="/admin/orders" variant="outlined" color="secondary">Admin</Button>
+              )}
               <Button onClick={handleLogout} variant="outlined" color="inherit">Logout</Button>
             </>
           ) : (

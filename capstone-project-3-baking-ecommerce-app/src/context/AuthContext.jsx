@@ -11,6 +11,8 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [loading, setLoading] = useState(false);
 
+  const isAdmin = !!user && user.role === "admin";
+
   function setAuth({ user, token }) {
     setUser(user);
     setToken(token);
@@ -66,10 +68,10 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (token && !user) fetchMe();
-  }, []);
+  }, [token, user]);
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, signup, clearAuth }}>
+    <AuthContext.Provider value={{ user, token, loading, login, isAdmin, signup, clearAuth }}>
       {children}
     </AuthContext.Provider>
   );
